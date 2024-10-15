@@ -1,0 +1,22 @@
+/*店舗シートと共有シートのIDの整合性維持 */
+function removeUnmatchedIds_A() {
+  var storeSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("A店");
+  var sharedSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("共有");
+
+  //A店シートのIDリストを取得
+  var storeData = storeSheet.getRange(2, 1, storeSheet.getLastRow() -1,1).getValues(); //A列のID
+  var storeIds = storeData.map(function(row){ return row[0]; }); //IDだけの配列を作成
+
+  //共有シートのIDリストを取得
+  var sharedData = sharedSheet.getRange(2, 1, sharedSheet.getLastRow() -1,7).getValues();  
+
+  //逆ループで処理安定。店舗シートに存在しないIDでかつ店舗名がシートと同一店舗の場合のみ
+  for (var i = sharedData.length -1; i >= 0; i--){  
+    var sharedId = sharedData[i][0];  //共有シートのID
+    var sharedStore = sharedData[i][6];
+    if (sharedStore === "A店" && storeIds.indexOf(sharedId) === -1){
+      sharedSheet.deleteRow(i + 2);
+    }
+
+  }
+}

@@ -1,0 +1,30 @@
+function transferToHistoryWithoutFormulas() {
+  //スプレッドシートとシート名を指定
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sharedSheet = ss.getSheetByName("共有");
+  var historySheet = ss.getSheetByName("履歴");
+
+  // 共有シートのすべてのデータを取得（A：M） - J列とM列の数式は無視する
+  var sharedData1 = sharedSheet.getRange(2, 1, sharedSheet.getLastRow() - 1, 9).getValues(); // A:I 列を取得
+  var sharedData2 = sharedSheet.getRange(2, 11, sharedSheet.getLastRow() - 1, 2).getValues(); // K:L 列を取得
+
+  // J列とM列の値を取得（数式を無視するため getValues() を使用）
+  var sharedJ = sharedSheet.getRange(2, 10, sharedSheet.getLastRow() - 1, 1).getValues(); // J列のみの値を取得
+  var sharedM = sharedSheet.getRange(2, 13, sharedSheet.getLastRow() - 1, 1).getValues(); // M列のみの値を取得
+
+  // 履歴シートの最終行を取得して、次の行からデータを追加
+  var historyLastRow = historySheet.getLastRow();
+
+  // 共有シートのデータを履歴シートに転記 (A:I 列)
+  historySheet.getRange(historyLastRow + 1, 1, sharedData1.length, sharedData1[0].length).setValues(sharedData1);
+  
+  // 共有シートのデータを履歴シートに転記 (K:L 列)
+  historySheet.getRange(historyLastRow + 1, 11, sharedData2.length, sharedData2[0].length).setValues(sharedData2);
+
+  // J列とM列の値を履歴シートに転記 (J列、M列)
+  historySheet.getRange(historyLastRow + 1, 10, sharedJ.length, 1).setValues(sharedJ); // J列
+  historySheet.getRange(historyLastRow + 1, 13, sharedM.length, 1).setValues(sharedM); // M列
+
+  // ログを出力して確認
+  Logger.log('共有シートから履歴シートへの転記が完了しました');
+}

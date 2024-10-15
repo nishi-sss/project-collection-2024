@@ -1,0 +1,10 @@
+function updateStore_A() {
+  //A店シートにIDを振る
+  assignIdStore_A();
+
+  //共有シートに転記
+  transferToSharedSheet_A();
+  
+  //共有シートからID削除
+  removeUnmatchedIds_A();
+}

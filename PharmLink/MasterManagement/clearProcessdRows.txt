@@ -1,0 +1,32 @@
+/*共有シートのクリア処理
+親スクリプト。子はdeleteFromStoreSheetスクリプトとupdateStoreSheetスクリプト */
+
+function clearProcessdRows() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet(); // ssに統一
+  var sharedSheet = ss.getSheetByName("共有"); // ssで取得する
+  var storeSheets = ["A店","B店","C店","D店","E店","F店","G店","H店","I店","J店"];
+  var lastRow = sharedSheet.getLastRow();
+
+  // 共有シートに上から順に処理
+  for (var i = lastRow; i >= 2; i--) {
+    var processedFlag = sharedSheet.getRange(i, 13).getValue(); // M列の「処理済みフラグ」
+    var remaining = sharedSheet.getRange(i, 10).getValue(); // J列の「残数」
+
+    if (processedFlag === "〇") {
+      var storeName = sharedSheet.getRange(i, 7).getValue(); // G列（店舗名）
+      var drugID = sharedSheet.getRange(i, 1).getValue(); // A列（ドラッグID）
+
+      if (remaining === 0) {
+        // 残数が0なら、店舗シートと共有シートから削除
+        deleteFromStoreSheet(storeName, drugID);
+        sharedSheet.deleteRow(i);
+      } else {
+        // 残数が0でなければ、店舗シートの不動数を書き換え共有シートから削除
+        updateStoreSheet(storeName, drugID, remaining);
+        sharedSheet.deleteRow(i);
+      }
+    }
+  }
+
+  Logger.log('共有シートのクリア処理が終了しました');
+}

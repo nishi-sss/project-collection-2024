@@ -1,0 +1,62 @@
+function transferToSharedSheet_A() {
+  var storeSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("A店");
+  var sharedSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("共有");
+
+  // シートが見つからない場合の対策
+  if (!storeSheet || !sharedSheet) {
+    Logger.log("シートが見つかりません。シート名を確認してください。");
+    return;
+  }
+
+  // A_リード岡山シートの最終行を取得
+  var lastStoreRow = storeSheet.getLastRow();
+  if (lastStoreRow <= 1) {  // データが存在しない場合は終了
+    Logger.log("A店シートにデータがありません。");
+    return;
+  }
+
+  // A_リード岡山シートのデータ取得 (2行目以降のA:F列)
+  var storeData = storeSheet.getRange(2, 1, lastStoreRow - 1, 6).getValues();
+
+  // 共有シートの最終行を確認 (もし空の場合に備える)
+  var lastSharedRow = sharedSheet.getLastRow();
+  if (lastSharedRow <= 1) {
+    Logger.log("共有シートにデータがありません。");
+  }
+
+  // 共有シートのA列のデータ取得 (A列すべてのデータを取得)
+  var sharedData = sharedSheet.getRange(2, 1, lastSharedRow - 1, 1).getValues().map(function(row) {
+    return row[0];
+  });
+
+  // 共有シートのA列で空白の最初の行を探す
+  var firstEmptyRow = sharedData.findIndex(function(id) {
+    return !id || id.trim() === "";
+  });
+
+  // 空行が見つからなかった場合、最後の行の次を使用
+  if (firstEmptyRow === -1) {
+    firstEmptyRow = sharedSheet.getLastRow(); // 最後の行の次の行を使う
+  } else {
+    firstEmptyRow += 2; // 実際の行番号に変換 (配列は0から始まるので +2)
+  }
+
+  for (var i = 0; i < storeData.length; i++) {
+    var storeId = storeData[i][0]; // 店舗シートのID
+
+    if (storeId && storeId.trim() !== "") {
+      var idIndex = sharedData.indexOf(storeId);  // IDが共有シートにあるか確認
+
+      if (idIndex === -1) {
+        // IDが存在しない場合、空いている最初の行に追加
+        sharedSheet.getRange(firstEmptyRow, 1, 1, 6).setValues([storeData[i]]);
+        sharedSheet.getRange(firstEmptyRow, 7).setValue("A店");
+        firstEmptyRow++; // 次の空き行に進む
+      } else {
+        // IDが存在する場合は上書き
+        sharedSheet.getRange(idIndex + 2, 2, 1, 5).setValues([storeData[i].slice(1, 6)]);
+        sharedSheet.getRange(idIndex + 2, 7).setValue("A店");
+      }
+    }
+  }
+}

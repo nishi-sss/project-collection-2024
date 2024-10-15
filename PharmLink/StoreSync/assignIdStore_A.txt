@@ -1,0 +1,40 @@
+/*ID生成。各店舗ごとのスクリプトとして作成。汎用性高くして干渉するのを避けるためあえて手間をとってます
+店舗増加時は、
+Function名に店舗シート名の頭文字（ローマ字）を入れること。assignIdToStore_Bなど。
+getSheetByname("店舗名")とする規則 
+*/
+function assignIdStore_A() {
+  //現在のシート名を取得
+
+var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("A店"); //getactivesheet()
+
+//シート名の最初の位置文字を取得
+var sheetName = sheet.getName();
+var storePrefix = sheetName.charAt(0); //シート名の最初の位置文字を取得
+
+//K1から最終IDを取得
+var lastId = sheet.getRange("K1").getValue();
+var lastNumber = parseInt(lastId.substring(1));  //先頭の文字を取り除いて数字部分を取得
+
+//データ範囲を取得
+var lastRow = sheet.getLastRow();
+var range = sheet.getRange(2, 2, lastRow -1, 1);
+
+var data = range.getValues(); //2次元配列でデータを取得
+
+for (var i = 0; i < data.length; i++){
+  //A列が空欄でB列に値がある場合
+  if(sheet.getRange(i + 2, 1).getValue() === "" && data[i][0] !== ""){
+    lastNumber++;  //最終IDをインクリメント
+    var newId = storePrefix + ('0000' + lastNumber).slice(-4);  //新しいIDを生成
+
+    //A列に新しいIDを振り分け
+    sheet.getRange(i + 2, 1).setValue(newId);
+
+  }
+}
+
+//最後にK1セルに新しい最終IDを更新
+var finalId = storePrefix + ('0000' + lastNumber).slice(-4);
+sheet.getRange("K1").setValue(finalId);
+}

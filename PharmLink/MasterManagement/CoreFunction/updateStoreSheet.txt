@@ -1,0 +1,15 @@
+function updateStoreSheet(storeName, drugID, remaining) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(storeName);
+  var lastRow = sheet.getLastRow();
+
+  for(var i = 2; i <= lastRow; i++){
+    var currentID = sheet.getRange(i, 1).getValue();
+    if(currentID === drugID){
+      sheet.getRange(i, 5).setValue(remaining); //E列
+      Logger.log(storeName + 'シートの不動数を更新:' + drugID + '-残数' + remaining);
+      break;
+    }
+  }
+  
+}

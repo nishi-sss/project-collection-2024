@@ -1,0 +1,15 @@
+function deleteFromStoreSheet(storeName, drugID) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(storeName);
+  var lastRow = sheet.getLastRow();
+
+  for(var i = 2; i <= lastRow; i++){
+    var currentID = sheet.getRange(i, 1).getValue();
+    if(currentID === drugID){
+      sheet.deleteRow(i);
+      Logger.log(storeName + 'シートから削除' + drugID);
+      break;
+    }
+  }
+  
+}
