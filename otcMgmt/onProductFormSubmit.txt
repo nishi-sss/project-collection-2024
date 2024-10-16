@@ -1,0 +1,8 @@
+/*フォームの入力を受けてプルダウンリストの更新*/
+
+function onProductFormSubmit(e) {
+
+  var form = FormApp.openById('1VKNFSPM8cxRAt9GNXUD1sQlyGm71_qMdohji2ZOcQeE'); //特定のフォームのIDを指定
+ 
+  updateDropdowns(); //プルダウンリストを更新
+}
