@@ -1,0 +1,6 @@
+/*ボタン設置用 */
+function update_11() {
+  copyProductData_11();
+  calculateTotalStockIn_11();
+  calculateTotalSales_11();
+}
