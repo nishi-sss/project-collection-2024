@@ -1,0 +1,73 @@
+/*全体のリセット（ブラウザの）デフォルトスタイルをリセット*/
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ベースフォントスタイル*/
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/*ヘッダー*/
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+/*メインコンテンツ*/
+main {
+    padding: 20px;
+}
+
+/*段落スタイル*/
+p {
+    margin-bottom: 20px;
+    line-height: 1.8;
+}
+
+/*ボタンスタイル*/
+button {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #555;
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+/*リンクスタイル*/
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #555;
+}
+
+/*フッター*/
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
