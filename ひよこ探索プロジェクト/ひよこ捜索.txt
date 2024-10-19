@@ -1,0 +1,25 @@
+function findImageInSheets() {
+  // スプレッドシート全体を取得
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // すべてのシートを取得
+  var sheets = spreadsheet.getSheets();
+  
+  // 全てのシートを順番に調べる
+  for (var i = 0; i < sheets.length; i++) {
+    var sheet = sheets[i];
+    var images = sheet.getImages(); // シート内のすべての画像を取得
+
+    // シート内のすべての画像を確認
+    for (var j = 0; j < images.length; j++) {
+      var image = images[j];
+
+      // 画像の左上のピクセル座標を取得
+      var rowOffset = image.getAnchorCell().getRow(); // 画像が配置されているセルの行
+      var columnOffset = image.getAnchorCell().getColumn(); // 画像が配置されているセルの列
+
+      // ログにシート名、画像の行・列を出力
+      Logger.log('Image found in sheet: ' + sheet.getName() + ' at row: ' + rowOffset + ', column: ' + columnOffset);
+    }
+  }
+}
